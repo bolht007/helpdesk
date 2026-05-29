@@ -3,136 +3,286 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IT Help Desk — Bangkok Steel Industry</title>
+  <title>BSI IT Helpdesk</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header>
-  <div class="logo">
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon">IT</div>
+    <div class="sidebar-logo-text">BSI IT Helpdesk</div>
+  </div>
+
+  <div class="sidebar-section-label">งาน IT</div>
+  <a class="sidebar-item active" onclick="showPage('queue')">
+    <span class="sidebar-icon">&#9776;</span> คิว Ticket ทั้งหมด
+  </a>
+  <a class="sidebar-item" onclick="showPage('mytickets')">
+    <span class="sidebar-icon">&#9776;</span> งานที่รับผิดชอบ
+  </a>
+
+  <div class="sidebar-section-label">รายงาน</div>
+  <a class="sidebar-item" onclick="showPage('dashboard')">
+    <span class="sidebar-icon">&#9998;</span> Dashboard
+  </a>
+
+  <div class="sidebar-section-label">จัดการระบบ</div>
+  <a class="sidebar-item" onclick="showPage('categories')">
+    <span class="sidebar-icon">&#9670;</span> ประเภทงาน
+  </a>
+  <a class="sidebar-item" onclick="showPage('sla')">
+    <span class="sidebar-icon">&#9200;</span> กำหนด SLA
+  </a>
+
+  <div class="sidebar-user">
+    <div class="sidebar-user-avatar">IT</div>
     <div>
-      <div class="company-name">BANGKOK STEEL INDUSTRY PCL.</div>
-      <div class="logo-sub">บริษัท กรุงเทพผลิตเหล็ก จำกัด (มหาชน)</div>
-    </div>
-    <div class="logo-divider"></div>
-    <div>
-      <div class="logo-text">IT Help Desk System</div>
-      <div class="logo-sub">ระบบแจ้งปัญหาด้านไอที</div>
+      <div class="sidebar-user-name">IT Staff</div>
+      <div class="sidebar-user-role">เจ้าหน้าที่ IT</div>
     </div>
   </div>
-  <div class="header-right">
-    <div class="header-time" id="clock"></div>
-  </div>
-</header>
+</div>
 
-<div class="container">
-  <div class="page-title">ระบบแจ้งปัญหาด้านไอที</div>
-  <div class="page-sub">IT Ticketing System — แผนกคอมพิวเตอร์</div>
+<!-- Main Content -->
+<div class="main-wrap">
 
-  <!-- Stats -->
-  <div class="stats">
-    <div class="stat-card open">
-      <div class="stat-label">รอดำเนินการ</div>
-      <div class="stat-num" id="count-open">0</div>
-    </div>
-    <div class="stat-card inprogress">
-      <div class="stat-label">กำลังดำเนินการ</div>
-      <div class="stat-num" id="count-inprogress">0</div>
-    </div>
-    <div class="stat-card done">
-      <div class="stat-label">เสร็จแล้ว</div>
-      <div class="stat-num" id="count-done">0</div>
-    </div>
-    <div class="stat-card total">
-      <div class="stat-label">ทั้งหมด</div>
-      <div class="stat-num" id="count-total">0</div>
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-title" id="topbar-title">คิว Ticket ทั้งหมด</div>
+    <div class="topbar-right">
+      <div class="header-time" id="clock"></div>
     </div>
   </div>
 
-  <!-- Main Grid -->
-  <div class="main-grid">
+  <!-- Page: Queue -->
+  <div class="page active" id="page-queue">
+    <div class="stats">
+      <div class="stat-card new">
+        <div class="stat-label">งานใหม่วันนี้</div>
+        <div class="stat-num" id="count-new">0</div>
+      </div>
+      <div class="stat-card open">
+        <div class="stat-label">รอดำเนินการ</div>
+        <div class="stat-num" id="count-open">0</div>
+      </div>
+      <div class="stat-card inprogress">
+        <div class="stat-label">กำลังดำเนินการ</div>
+        <div class="stat-num" id="count-inprogress">0</div>
+      </div>
+      <div class="stat-card done">
+        <div class="stat-label">ปิดวันนี้</div>
+        <div class="stat-num" id="count-done">0</div>
+      </div>
+    </div>
 
-    <!-- Form Panel -->
+    <!-- Filter -->
+    <div class="filter-bar">
+      <div class="filter-group">
+        <label>สถานะ</label>
+        <select id="filter-status" onchange="filterTickets()">
+          <option value="">ทั้งหมด</option>
+          <option value="open">รอดำเนินการ</option>
+          <option value="inprogress">กำลังดำเนินการ</option>
+          <option value="done">ปิดแล้ว</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>ประเภท</label>
+        <select id="filter-category" onchange="filterTickets()">
+          <option value="">ทั้งหมด</option>
+          <option>คอมพิวเตอร์/Laptop</option>
+          <option>Internet/Network</option>
+          <option>เครื่องพิมพ์</option>
+          <option>ซอฟต์แวร์/License</option>
+          <option>Email/บัญชีผู้ใช้</option>
+          <option>Server/ระบบ</option>
+          <option>CCTV</option>
+          <option>โทรศัพท์</option>
+          <option>อุปกรณ์สำนักงาน</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>ความเร่งด่วน</label>
+        <select id="filter-priority" onchange="filterTickets()">
+          <option value="">ทั้งหมด</option>
+          <option value="low">ปกติ</option>
+          <option value="medium">ด่วน</option>
+          <option value="high">เร่งด่วนมาก</option>
+          <option value="critical">วิกฤต</option>
+        </select>
+      </div>
+      <div class="filter-group" style="flex:2">
+        <label>ค้นหา</label>
+        <input type="text" id="filter-search" placeholder="เลขที่ Ticket, หัวข้อ, รายละเอียด..." oninput="filterTickets()">
+      </div>
+      <button class="btn-primary" onclick="openModal()">+ สร้าง Ticket</button>
+    </div>
+
+    <!-- Ticket Table -->
     <div class="panel">
-      <div class="panel-header">
-        <span class="panel-title">แบบฟอร์มแจ้งปัญหา</span>
-        <span class="badge">NEW TICKET</span>
+      <table class="ticket-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Ticket No</th>
+            <th>หัวข้อ</th>
+            <th>แผนก</th>
+            <th>ประเภท</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>มอบหมายให้</th>
+            <th>วันที่แจ้ง</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="ticketTableBody">
+          <tr><td colspan="10" class="empty-row">ยังไม่มีรายการ Ticket ครับ</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Page: My Tickets -->
+  <div class="page" id="page-mytickets">
+    <div class="stats">
+      <div class="stat-card new"><div class="stat-label">งานใหม่วันนี้</div><div class="stat-num">0</div></div>
+      <div class="stat-card open"><div class="stat-label">รอเริ่มดำเนินการ</div><div class="stat-num">0</div></div>
+      <div class="stat-card inprogress"><div class="stat-label">กำลังดำเนินการ</div><div class="stat-num">0</div></div>
+      <div class="stat-card done"><div class="stat-label">ปิดวันนี้</div><div class="stat-num">0</div></div>
+    </div>
+    <div class="panel" style="padding:32px;text-align:center;color:var(--text-dim)">
+      งานที่รับผิดชอบจะแสดงที่นี่ครับ
+    </div>
+  </div>
+
+  <!-- Page: Dashboard -->
+  <div class="page" id="page-dashboard">
+    <div class="stats">
+      <div class="stat-card new"><div class="stat-label">Ticket รวม</div><div class="stat-num" id="dash-total">0</div></div>
+      <div class="stat-card open"><div class="stat-label">รอดำเนินการ</div><div class="stat-num" id="dash-open">0</div></div>
+      <div class="stat-card inprogress"><div class="stat-label">กำลังทำ</div><div class="stat-num" id="dash-inprogress">0</div></div>
+      <div class="stat-card done"><div class="stat-label">ปิดแล้ว</div><div class="stat-num" id="dash-done">0</div></div>
+    </div>
+    <div class="panel" style="padding:24px">
+      <div class="panel-header-title">สัดส่วนตามความเร่งด่วน</div>
+      <div class="priority-summary" id="priority-summary"></div>
+    </div>
+  </div>
+
+  <!-- Page: Categories -->
+  <div class="page" id="page-categories">
+    <div class="categories-grid" id="categories-grid"></div>
+  </div>
+
+  <!-- Page: SLA -->
+  <div class="page" id="page-sla">
+    <div class="panel" style="padding:24px">
+      <div class="panel-header-title">ตาราง SLA Matrix</div>
+      <table class="sla-table">
+        <thead>
+          <tr>
+            <th>ประเภทงาน</th>
+            <th colspan="2" style="background:#6b7280">ปกติ</th>
+            <th colspan="2" style="background:#d97706">ด่วน</th>
+            <th colspan="2" style="background:#dc2626">เร่งด่วนมาก</th>
+            <th colspan="2" style="background:#111827">วิกฤต</th>
+          </tr>
+          <tr>
+            <th></th>
+            <th>ตอบรับ (ชม.)</th><th>แก้ไข (ชม.)</th>
+            <th>ตอบรับ (ชม.)</th><th>แก้ไข (ชม.)</th>
+            <th>ตอบรับ (ชม.)</th><th>แก้ไข (ชม.)</th>
+            <th>ตอบรับ (ชม.)</th><th>แก้ไข (ชม.)</th>
+          </tr>
+        </thead>
+        <tbody id="sla-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal: Create Ticket -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal()"></div>
+<div class="modal" id="modal">
+  <div class="modal-header">
+    <span class="modal-title">สร้าง Ticket ใหม่</span>
+    <button class="modal-close" onclick="closeModal()">&#10005;</button>
+  </div>
+  <div class="modal-body">
+    <div class="form-row">
+      <div class="form-group">
+        <label>ชื่อผู้แจ้ง</label>
+        <input type="text" id="reporter" placeholder="ชื่อ-นามสกุล">
       </div>
-      <div class="panel-body">
-        <div class="form-row">
-          <div class="form-group">
-            <label>ชื่อผู้แจ้ง</label>
-            <input type="text" id="reporter" placeholder="ชื่อ-นามสกุล">
-          </div>
-          <div class="form-group">
-            <label>แผนก / ฝ่าย</label>
-            <select id="department">
-              <option value="">— เลือกแผนก —</option>
-              <option>แผนกคอมพิวเตอร์</option>
-              <option>ฝ่ายขาย</option>
-              <option>ฝ่ายบัญชี</option>
-              <option>ฝ่ายผลิต</option>
-              <option>ฝ่าย HR</option>
-              <option>ฝ่ายจัดซื้อ</option>
-              <option>ฝ่ายสังกะสี</option>
-              <option>อื่นๆ</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>ประเภทปัญหา</label>
-          <select id="category">
-            <option value="">— เลือกประเภท —</option>
-            <option>คอมพิวเตอร์ / Hardware</option>
-            <option>ซอฟต์แวร์ / Software</option>
-            <option>อินเทอร์เน็ต / เครือข่าย</option>
-            <option>อีเมล</option>
-            <option>เครื่องพิมพ์</option>
-            <option>ระบบ 3CX โทรศัพท์</option>
-            <option>ระบบ Server</option>
-            <option>อื่นๆ</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>รายละเอียดปัญหา</label>
-          <textarea id="detail" placeholder="อธิบายปัญหาที่พบ..."></textarea>
-        </div>
-
-        <div class="form-group">
-          <label>ระดับความเร่งด่วน</label>
-          <div class="priority-group">
-            <button class="priority-btn low active" onclick="setPriority('low', this)">ปกติ</button>
-            <button class="priority-btn medium" onclick="setPriority('medium', this)">เร่งด่วน</button>
-            <button class="priority-btn high" onclick="setPriority('high', this)">วิกฤต</button>
-          </div>
-        </div>
-
-        <button class="submit-btn" onclick="submitTicket()">ส่งแจ้งปัญหา</button>
+      <div class="form-group">
+        <label>แผนก / ฝ่าย</label>
+        <select id="department">
+          <option value="">— เลือกแผนก —</option>
+          <option>ฝ่ายขาย</option>
+          <option>ฝ่ายบัญชีการเงิน</option>
+          <option>ฝ่ายผลิต</option>
+          <option>ฝ่ายทรัพยากรบุคคล</option>
+          <option>ฝ่ายจัดซื้อ</option>
+          <option>ฝ่ายสังกะสี</option>
+          <option>ฝ่ายควบคุมคุณภาพ</option>
+          <option>ฝ่ายซ่อมบำรุง</option>
+          <option>ฝ่ายคลังสินค้า</option>
+          <option>แผนกคอมพิวเตอร์</option>
+        </select>
       </div>
     </div>
-
-    <!-- Ticket List Panel -->
-    <div class="panel">
-      <div class="panel-header">
-        <span class="panel-title">รายการ Ticket</span>
+    <div class="form-row">
+      <div class="form-group">
+        <label>ประเภทปัญหา</label>
+        <select id="category">
+          <option value="">— เลือกประเภท —</option>
+          <option>คอมพิวเตอร์/Laptop</option>
+          <option>Internet/Network</option>
+          <option>เครื่องพิมพ์</option>
+          <option>ซอฟต์แวร์/License</option>
+          <option>Email/บัญชีผู้ใช้</option>
+          <option>Server/ระบบ</option>
+          <option>CCTV</option>
+          <option>โทรศัพท์</option>
+          <option>อุปกรณ์สำนักงาน</option>
+        </select>
       </div>
-      <div class="panel-body" style="padding:14px">
-        <div class="ticket-list" id="ticketList">
-          <div class="empty">
-            <div class="empty-text">ยังไม่มีรายการแจ้งปัญหาครับ</div>
-          </div>
-        </div>
+      <div class="form-group">
+        <label>มอบหมายให้</label>
+        <select id="assignee">
+          <option value="">— เลือก IT Staff —</option>
+          <option>IT Staff 1</option>
+          <option>IT Staff 2</option>
+          <option>IT Manager</option>
+        </select>
       </div>
     </div>
-
+    <div class="form-group">
+      <label>หัวข้อปัญหา</label>
+      <input type="text" id="title" placeholder="อธิบายปัญหาสั้นๆ">
+    </div>
+    <div class="form-group">
+      <label>รายละเอียดปัญหา</label>
+      <textarea id="detail" placeholder="อธิบายปัญหาที่พบ..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>ระดับความเร่งด่วน</label>
+      <div class="priority-group">
+        <button class="priority-btn low active" onclick="setPriority('low', this)">ปกติ</button>
+        <button class="priority-btn medium" onclick="setPriority('medium', this)">ด่วน</button>
+        <button class="priority-btn high" onclick="setPriority('high', this)">เร่งด่วนมาก</button>
+        <button class="priority-btn critical" onclick="setPriority('critical', this)">วิกฤต</button>
+      </div>
+    </div>
+    <button class="submit-btn" onclick="submitTicket()">ส่งแจ้งปัญหา</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
-
 <script src="script.js"></script>
 </body>
 </html>
