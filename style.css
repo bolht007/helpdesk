@@ -529,3 +529,89 @@ label {
 }
 
 .toast.show { transform: translateY(0); opacity: 1; }
+
+/* ---- Login ---- */
+.login-page {
+  min-height: 100vh;
+  background: #1a1f2e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-card {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  width: 380px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.login-logo {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.login-logo-icon {
+  width: 56px; height: 56px;
+  background: var(--accent);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 800;
+  color: white; margin: 0 auto 12px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.login-logo-text {
+  font-size: 20px; font-weight: 700;
+  color: var(--text);
+}
+
+.login-logo-sub {
+  font-size: 11px; color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.login-error {
+  color: var(--red);
+  font-size: 12px;
+  margin-bottom: 8px;
+  min-height: 16px;
+}
+
+.login-hint {
+  margin-top: 16px;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 8px;
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.8;
+}
+
+/* ---- Role Badge ---- */
+.role-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-right: 12px;
+}
+
+.role-admin    { background: #fee2e2; color: var(--red); }
+.role-itstaff  { background: #dbeafe; color: var(--blue); }
+.role-user     { background: #d1fae5; color: var(--green); }
+
+/* ---- Logout Button ---- */
+.logout-btn {
+  margin-left: auto;
+  background: none; border: none;
+  color: rgba(255,255,255,0.4);
+  cursor: pointer; font-size: 14px;
+  padding: 4px 6px; border-radius: 4px;
+  transition: all 0.15s;
+}
+
+.logout-btn:hover { color: white; background: rgba(255,255,255,0.1); }
